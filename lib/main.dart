@@ -466,7 +466,21 @@ class LearnedWordsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Learned Words'),
+        title: Text(
+          '～ LearnedWords ～',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.orangeAccent,
+            shadows: [
+              Shadow(
+                blurRadius: 2.0,
+                color: Colors.black45,
+                offset: Offset(3.0, 3.0),
+              )
+            ],
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: learnedWords.length,
