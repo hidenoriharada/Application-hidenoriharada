@@ -459,9 +459,19 @@ class _WordListScreenState extends State<WordListScreen> {
 
 
 //正解した単語を表示
-class LearnedWordsScreen extends StatelessWidget {
+class LearnedWordsScreen extends StatefulWidget {
   final List<Word> learnedWords;
   const LearnedWordsScreen({super.key, required this.learnedWords});
+  @override
+  _LearnedWordsScreenState createState() => _LearnedWordsScreenState();
+}
+
+class _LearnedWordsScreenState extends State<LearnedWordsScreen> {
+  void _removeWord(int index) {//単語を消去するための関数
+    setState(() {
+      widget.learnedWords.removeAt(index);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -483,8 +493,8 @@ class LearnedWordsScreen extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-        itemCount: learnedWords.length,
-        itemBuilder: (context, index){
+        itemCount: widget.learnedWords.length,
+        itemBuilder: (context, index) {
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: const EdgeInsets.all(10),
@@ -505,14 +515,14 @@ class LearnedWordsScreen extends StatelessWidget {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: learnedWords[index].word,
+                      text: widget.learnedWords[index].word,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                       ),
                     ),
                     TextSpan(
-                      text: ' (${learnedWords[index].partOfSpeech})',
+                      text: ' (${widget.learnedWords[index].partOfSpeech})',
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 15,
@@ -521,8 +531,11 @@ class LearnedWordsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              subtitle: Text(
-               learnedWords[index].meaning),
+              subtitle: Text(widget.learnedWords[index].meaning),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _removeWord(index),//消去ボタン追加
+              ),
             ),
           );
         },
