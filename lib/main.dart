@@ -251,9 +251,9 @@ class _WordListScreenState extends State<WordListScreen> {
                     ],
                   ),
                 ),
-                content: Container(
+                content: Container(//コンテナサイズ変更
                   width: 400,
-                  height: 300,
+                  height: 200,
                   child: isEditing
                       ? Column(
                     children: [
@@ -343,9 +343,20 @@ class _WordListScreenState extends State<WordListScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text('Similar Words:'),
+                      const Text('Similar Words:',//類似単語デザイン変更
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
                       for (var similarWord in similarWords)
-                        Text(similarWord),
+                        Text('・ $similarWord',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
+                        ),
                     ],
                   ),
                 ),
