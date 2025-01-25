@@ -23,7 +23,7 @@ Future<List<String>> fetchSimilarWords(String word) async {
 
 
 void main() {
-    runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 
@@ -72,10 +72,19 @@ class _WordListScreenState extends State<WordListScreen> {
     });
   }
 
+  //画面間を移動するためにNavigator.of(context).pushで新しい画面を追加する
   void _navigateToLearnedWordsScreen() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => LearnedWordsScreen(learnedWords: _learnedWords),
+        builder: (context) => LearnedWordsScreen(
+          learnedWords: _learnedWords,
+          onMoveBackToWordList: (word) {
+            setState(() {
+              _words.add(word);
+              _isMeaningVisible.add(false);
+            });
+          },
+        ),
       ),
     );
   }
@@ -461,17 +470,31 @@ class _WordListScreenState extends State<WordListScreen> {
 //正解した単語を表示
 class LearnedWordsScreen extends StatefulWidget {
   final List<Word> learnedWords;
-  const LearnedWordsScreen({super.key, required this.learnedWords});
+  final Function(Word) onMoveBackToWordList;
+
+  const LearnedWordsScreen({
+    super.key,
+    required this.learnedWords,
+    required this.onMoveBackToWordList,
+  });
+
   @override
   _LearnedWordsScreenState createState() => _LearnedWordsScreenState();
 }
 
 class _LearnedWordsScreenState extends State<LearnedWordsScreen> {
-  void _removeWord(int index) {//単語を消去するための関数
+  void _removeWord(int index) {
     setState(() {
       widget.learnedWords.removeAt(index);
     });
   }
+
+  void _moveBackToWordList(int index) {
+    final word = widget.learnedWords[index];
+    widget.onMoveBackToWordList(word);
+    _removeWord(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -532,9 +555,18 @@ class _LearnedWordsScreenState extends State<LearnedWordsScreen> {
                 ),
               ),
               subtitle: Text(widget.learnedWords[index].meaning),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _removeWord(index),//消去ボタン追加
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _removeWord(index),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.undo),
+                    onPressed: () => _moveBackToWordList(index),
+                  ),
+                ],
               ),
             ),
           );
