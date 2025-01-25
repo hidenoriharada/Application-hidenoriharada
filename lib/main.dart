@@ -484,10 +484,46 @@ class LearnedWordsScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         itemCount: learnedWords.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(learnedWords[index].word),
-            subtitle: Text(learnedWords[index].meaning),
+        itemBuilder: (context, index){
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ListTile(
+              title: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: learnedWords[index].word,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' (${learnedWords[index].partOfSpeech})',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: Text(
+               learnedWords[index].meaning),
+            ),
           );
         },
       ),
